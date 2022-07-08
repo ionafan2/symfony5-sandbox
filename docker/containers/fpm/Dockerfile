@@ -18,7 +18,6 @@ RUN apt-get update \
         vim \
         unzip
 
-
 RUN pecl install xdebug apcu apcu mcrypt \
     && docker-php-ext-install \
         gd \
@@ -48,6 +47,27 @@ RUN echo "xdebug.mode=debug" >> /usr/local/etc/php/conf.d/xdebug.ini \
 # Install Composer
 RUN cd /tmp && curl -sS https://getcomposer.org/installer | php && \
     mv /tmp/composer.phar /usr/local/bin/composer
+
+# Instal Fish SHELL
+RUN apt-get install -y fish
+RUN chsh -s /usr/bin/fish
+
+# Attemptn to enable Autocomplition for Symfony Console for Fish
+
+#RUN apt-get install -y bash-completion
+
+#RUN echo "export PATH=\$PATH:/root/.config/composer/vendor/bin/" >> /root/.profile
+#RUN echo "eval \"\$(symfony-autocomplete)\"" >> /root/.profile
+
+# Set Up Autocomplition for Fish
+#RUN mkdir -p /root/.config/fish/completions
+#RUN touch /root/.config/fish/completions/composer.fish
+#RUN touch /root/.config/fish/completions/console.fish
+
+#CMD /root/.config/composer/vendor/bin/symfony-autocomplete --shell=fish console > ~/.config/fish/completions/console.fish
+
+#ENV SHELL /usr/bin/fish
+#ENV LANG=C.UTF-8 LANGUAGE=C.UTF-8 LC_ALL=C.UTF-8
 
 WORKDIR /var/www/symfony5-sandbox
 
