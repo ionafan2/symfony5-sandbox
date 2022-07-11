@@ -1,3 +1,4 @@
+FROM node:latest AS node
 FROM php:8.0.14-fpm
 
 RUN mkdir -p /usr/share/man/man1
@@ -68,6 +69,12 @@ RUN chsh -s /usr/bin/fish
 
 #ENV SHELL /usr/bin/fish
 #ENV LANG=C.UTF-8 LANGUAGE=C.UTF-8 LC_ALL=C.UTF-8
+
+# Install Nodejs, NPM and Yarn
+COPY --from=node /usr/local/lib/node_modules /usr/local/lib/node_modules
+COPY --from=node /usr/local/bin/node /usr/local/bin/node
+RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm
+RUN npm install --global yarn
 
 WORKDIR /var/www/symfony5-sandbox
 
