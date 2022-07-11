@@ -3,12 +3,21 @@
 namespace App\Controller;
 
 use App\Service\MarkdownHelper;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Twig\Environment;
 
 class QuestionController extends AbstractController
 {
+    public function __construct(
+        private LoggerInterface $logger,
+        private bool $isDebug
+    )
+    {
+    }
+
+
     /**
      * @Route("/", name="app_homepage")
      */
@@ -29,6 +38,10 @@ class QuestionController extends AbstractController
      */
     public function show($slug, MarkdownHelper $markdownHelper)
     {
+        if (!$this->isDebug) {
+            $this->logger->info(__FUNCTION__);
+        }
+
         $answers = [
             'Make sure your cat is sitting *purrrfectly* still 🤣',
             'Honestly, I like furry shoes better than MY cat',

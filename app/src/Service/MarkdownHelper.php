@@ -22,14 +22,14 @@ class MarkdownHelper
         private MarkdownParserInterface $markdownParser,
         private CacheInterface          $cache,
         private bool $isDebug,
-        private LoggerInterface $markdownLogger
+        private LoggerInterface $dLogger
     )
     {
     }
 
     public function parse(string $string): string
     {
-        $this->markdownLogger->info("");
+        $this->dLogger->info("TESTSTSTSTSTS");
 
         if (!$this->isDebug) {
             return $this->markdownParser->transformMarkdown($string);
