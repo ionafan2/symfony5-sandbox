@@ -4,19 +4,15 @@ namespace App\Controller;
 
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
 class CommentController extends AbstractController
 {
     /**
-     * @param $id
-     * @param $direction
-     * @param LoggerInterface $logger
-     * @return Response
+     * @Route("/comments/{id}/vote/{direction<up|down>}", methods="POST")
      */
-    #[Route('/comments/{id<\d+>}/vote/{direction<up|down>}', name: 'app_comment', methods: "POST")]
-    public function commentVote($id, $direction, LoggerInterface $logger): Response
+    public function commentVote($id, $direction, LoggerInterface $logger)
     {
         // todo - use id to query the database
 

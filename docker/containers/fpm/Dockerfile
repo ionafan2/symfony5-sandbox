@@ -76,6 +76,9 @@ COPY --from=node /usr/local/bin/node /usr/local/bin/node
 RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm
 RUN npm install --global yarn
 
+# See https://stackoverflow.com/questions/69394632/webpack-build-failing-with-err-ossl-evp-unsupported
+ENV NODE_OPTIONS=--openssl-legacy-provider
+
 WORKDIR /var/www/symfony5-sandbox
 
 EXPOSE 9000
