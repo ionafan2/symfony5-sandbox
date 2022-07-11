@@ -1,8 +1,6 @@
 FROM node:latest AS node
 FROM php:8.0.14-fpm
 
-RUN mkdir -p /usr/share/man/man1
-
 RUN apt-get update \
     && apt-get install -y \
         openjdk-11-jdk \
@@ -52,23 +50,6 @@ RUN cd /tmp && curl -sS https://getcomposer.org/installer | php && \
 # Instal Fish SHELL
 RUN apt-get install -y fish
 RUN chsh -s /usr/bin/fish
-
-# Attemptn to enable Autocomplition for Symfony Console for Fish
-
-#RUN apt-get install -y bash-completion
-
-#RUN echo "export PATH=\$PATH:/root/.config/composer/vendor/bin/" >> /root/.profile
-#RUN echo "eval \"\$(symfony-autocomplete)\"" >> /root/.profile
-
-# Set Up Autocomplition for Fish
-#RUN mkdir -p /root/.config/fish/completions
-#RUN touch /root/.config/fish/completions/composer.fish
-#RUN touch /root/.config/fish/completions/console.fish
-
-#CMD /root/.config/composer/vendor/bin/symfony-autocomplete --shell=fish console > ~/.config/fish/completions/console.fish
-
-#ENV SHELL /usr/bin/fish
-#ENV LANG=C.UTF-8 LANGUAGE=C.UTF-8 LC_ALL=C.UTF-8
 
 # Install Nodejs, NPM and Yarn
 COPY --from=node /usr/local/lib/node_modules /usr/local/lib/node_modules
