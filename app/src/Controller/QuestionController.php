@@ -34,33 +34,10 @@ class QuestionController extends AbstractController
 
     /**
      * @Route("/questions/new", name="app_new")
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Exception
      */
     public function new(EntityManagerInterface $em)
     {
-
-        $question = new Question();
-        $question->setName('Missing pants')
-            ->setSlug('missing-pants-' . rand(0, 1000))
-            ->setVotes(rand(-10, 10))
-            ->setQuestion(question: <<<EOF
-Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-Accusantium aliquam, at consectetur cupiditate ea exercitationem facilis iusto laudantium maxime minima nisi placeat quasi,
- quibusdam repudiandae tempora tenetur veniam vero. Delectus.
-EOF
-            );
-
-        if (rand(1, 10) > 2) {
-            $question->setAskedAt(new \DateTimeImmutable(sprintf('-%d days', rand(1, 10))));
-        }
-
-        $em->persist($question);
-        $em->flush();
-
-        return new Response(sprintf("ID: %d and Slug: %s",
-            $question->getId(), $question->getSlug()
-        ));
+        return new Response('For v2');
     }
 
     /**
