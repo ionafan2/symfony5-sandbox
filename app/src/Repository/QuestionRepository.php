@@ -6,6 +6,7 @@ use App\Entity\Question;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -52,25 +53,21 @@ class QuestionRepository extends ServiceEntityRepository
      */
     public function findAllAskedOrderByNewest()
     {
-        $qb = $this->createQueryBuilder('q');
-
-        return $qb
-            ->andWhere($qb->expr()->isNotNull('q.askedAt'))
+        return $this->addIsAskedQueryBuilder()
             ->orderBy('q.askedAt', 'DESC')
             ->getQuery()
             ->getResult();
     }
 
-
-    /*
-    public function findOneBySomeField($value): ?Question
+    private function addIsAskedQueryBuilder(QueryBuilder $qb = null): QueryBuilder
     {
-        return $this->createQueryBuilder('q')
-            ->andWhere('q.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        return $this->getOrCreateQueryBuilder($qb)
+            ->andWhere('q.askedAt IS NOT NULL');
     }
-    */
+
+    private function getOrCreateQueryBuilder(QueryBuilder $qb = null): QueryBuilder
+    {
+        return $qb ?: $this->createQueryBuilder('q');
+    }
+
 }
