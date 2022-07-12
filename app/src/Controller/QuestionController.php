@@ -2,17 +2,19 @@
 
 namespace App\Controller;
 
+use App\Entity\Question;
 use App\Service\MarkdownHelper;
+use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Twig\Environment;
 
 class QuestionController extends AbstractController
 {
     public function __construct(
         private LoggerInterface $logger,
-        private bool $isDebug
+        private bool            $isDebug
     )
     {
     }
@@ -21,7 +23,7 @@ class QuestionController extends AbstractController
     /**
      * @Route("/", name="app_homepage")
      */
-    public function homepage(Environment $twigEnvironment)
+    public function homepage()
     {
         /*
         // fun example of using the Twig service directly!
@@ -31,6 +33,36 @@ class QuestionController extends AbstractController
         */
 
         return $this->render('question/homepage.html.twig');
+    }
+
+    /**
+     * @Route("/questions/new", name="app_new")
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Exception
+     */
+    public function new(EntityManagerInterface $em)
+    {
+
+        $question = new Question();
+        $question->setName('Missing pants')
+            ->setSlug('missing-pants-' . rand(0, 1000))
+            ->setQuestion(question: <<<EOF
+Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+Accusantium aliquam, at consectetur cupiditate ea exercitationem facilis iusto laudantium maxime minima nisi placeat quasi,
+ quibusdam repudiandae tempora tenetur veniam vero. Delectus.
+EOF
+            );
+
+        if (rand(1, 10) > 2) {
+            $question->setAskedAt(new \DateTimeImmutable(sprintf('-%d days', rand(1, 10))));
+        }
+
+        $em->persist($question);
+        $em->flush();
+
+        return new Response(sprintf("ID: %d and Slug: %s",
+            $question->getId(), $question->getSlug()
+        ));
     }
 
     /**
