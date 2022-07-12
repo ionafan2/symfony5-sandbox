@@ -74,5 +74,8 @@
             "allow-contrib": true,
             "require": "5.0.*"
         }
+    },
+    "require-dev": {
+        "symfony/maker-bundle": "*"
     }
 }
