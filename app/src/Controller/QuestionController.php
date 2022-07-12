@@ -25,13 +25,6 @@ class QuestionController extends AbstractController
      */
     public function homepage()
     {
-        /*
-        // fun example of using the Twig service directly!
-        $html = $twigEnvironment->render('question/homepage.html.twig');
-
-        return new Response($html);
-        */
-
         return $this->render('question/homepage.html.twig');
     }
 
@@ -89,12 +82,9 @@ EOF
             'Maybe... try saying the spell backwards?',
         ];
 
-
-
         return $this->render('question/show.html.twig', [
-            'question' => $question->getName(),
-            'answers' => $answers,
-            'questionText' => $question->getQuestion()
+            'question' => $question,
+            'answers' => $answers
         ]);
     }
 }
