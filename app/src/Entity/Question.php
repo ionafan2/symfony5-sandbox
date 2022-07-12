@@ -30,12 +30,17 @@ class Question
     /**
      * @ORM\Column(type="text")
      */
-    private $question;
+    private string $question;
 
     /**
      * @ORM\Column(type="datetime_immutable", nullable=true)
      */
-    private $askedAt;
+    private ?\DateTimeImmutable $askedAt;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private int $votes = 0;
 
     public function getId(): ?int
     {
@@ -86,6 +91,24 @@ class Question
     public function setAskedAt(?\DateTimeImmutable $askedAt): self
     {
         $this->askedAt = $askedAt;
+
+        return $this;
+    }
+
+    public function getVotes(): int
+    {
+        return $this->votes;
+    }
+
+
+    public function getVotesString(): string
+    {
+        return ($this->getVotes() > 0) ? '+ ' . abs($this->getVotes()) : '- ' . abs($this->getVotes());
+    }
+
+    public function setVotes(int $votes): self
+    {
+        $this->votes = $votes;
 
         return $this;
     }

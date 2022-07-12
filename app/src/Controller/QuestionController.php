@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\Question;
 use App\Repository\QuestionRepository;
-use App\Service\MarkdownHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,7 +18,6 @@ class QuestionController extends AbstractController
     )
     {
     }
-
 
     /**
      * @Route("/", name="app_homepage")
@@ -44,6 +42,7 @@ class QuestionController extends AbstractController
         $question = new Question();
         $question->setName('Missing pants')
             ->setSlug('missing-pants-' . rand(0, 1000))
+            ->setVotes(rand(-10, 10))
             ->setQuestion(question: <<<EOF
 Lorem ipsum dolor sit amet, consectetur adipisicing elit.
 Accusantium aliquam, at consectetur cupiditate ea exercitationem facilis iusto laudantium maxime minima nisi placeat quasi,
