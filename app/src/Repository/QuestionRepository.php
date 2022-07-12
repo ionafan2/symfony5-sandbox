@@ -52,11 +52,11 @@ class QuestionRepository extends ServiceEntityRepository
      */
     public function findAllAskedOrderByNewest()
     {
-        return $this->createQueryBuilder('q')
-            ->andWhere('q.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('q.id', 'ASC')
-            ->setMaxResults(10)
+        $qb = $this->createQueryBuilder('q');
+
+        return $qb
+            ->andWhere($qb->expr()->isNotNull('q.askedAt'))
+            ->orderBy('q.askedAt', 'DESC')
             ->getQuery()
             ->getResult();
     }
