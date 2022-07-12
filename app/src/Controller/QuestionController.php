@@ -66,17 +66,8 @@ EOF
     /**
      * @Route("/questions/{slug}", name="app_question_show")
      */
-    public function show($slug, MarkdownHelper $markdownHelper, EntityManagerInterface $entityManager)
+    public function show(Question $question): Response
     {
-        $repository = $entityManager->getRepository(Question::class);
-
-        /** @var Question|null $question */
-        $question = $repository->findOneBy(['slug' => $slug]);
-
-        if (null === $question) {
-            throw $this->createNotFoundException();
-        }
-
         if (!$this->isDebug) {
             $this->logger->info(__FUNCTION__);
         }
