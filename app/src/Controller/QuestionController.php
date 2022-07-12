@@ -68,8 +68,17 @@ EOF
     /**
      * @Route("/questions/{slug}", name="app_question_show")
      */
-    public function show($slug, MarkdownHelper $markdownHelper)
+    public function show($slug, MarkdownHelper $markdownHelper, EntityManagerInterface $entityManager)
     {
+        $repository = $entityManager->getRepository(Question::class);
+
+        /** @var Question|null $question */
+        $question = $repository->findOneBy(['slug' => $slug]);
+
+        if (null === $question) {
+            throw $this->createNotFoundException();
+        }
+
         if (!$this->isDebug) {
             $this->logger->info(__FUNCTION__);
         }
@@ -80,14 +89,12 @@ EOF
             'Maybe... try saying the spell backwards?',
         ];
 
-        $questionText = "I've been turned into a cat, any *thoughts* on how to turn back? While I'm **adorable**, I don't really care for cat food.";
 
-        $questionText = $markdownHelper->parse($questionText);
 
         return $this->render('question/show.html.twig', [
-            'question' => ucwords(str_replace('-', ' ', $slug)),
+            'question' => $question->getName(),
             'answers' => $answers,
-            'questionText' => $questionText
+            'questionText' => $question->getQuestion()
         ]);
     }
 }
