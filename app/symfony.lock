@@ -357,6 +357,9 @@
     "symfony/options-resolver": {
         "version": "v5.0.11"
     },
+    "symfony/polyfill-intl-grapheme": {
+        "version": "v1.26.0"
+    },
     "symfony/polyfill-intl-idn": {
         "version": "v1.13.1"
     },
@@ -409,6 +412,9 @@
     },
     "symfony/stopwatch": {
         "version": "v5.0.4"
+    },
+    "symfony/string": {
+        "version": "v5.0.11"
     },
     "symfony/translation": {
         "version": "5.0",

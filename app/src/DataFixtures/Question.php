@@ -10,6 +10,7 @@ class Question extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        QuestionFactory::createMany(5);
+        QuestionFactory::createMany(15);
+        QuestionFactory::new()->unpublished()->createMany(5);
     }
 }

@@ -7,7 +7,7 @@ use App\Repository\QuestionRepository;
 use Zenstruck\Foundry\RepositoryProxy;
 use Zenstruck\Foundry\ModelFactory;
 use Zenstruck\Foundry\Proxy;
-
+use Symfony\Component\String\Slugger\AsciiSlugger;
 /**
  * @extends ModelFactory<Question>
  *
@@ -28,24 +28,33 @@ use Zenstruck\Foundry\Proxy;
  */
 final class QuestionFactory extends ModelFactory
 {
+
+    public function unpublished(): self
+    {
+        return $this->addState(["askedAt" => null]);
+    }
+
     protected function getDefaults(): array
     {
-
         return [
-            'name' => self::faker()->words(4, true),
-            'slug' => strtolower(str_replace(" ", "_", self::faker()->words(3, true))),
-            'question' => self::faker()->text(),
-            'votes' => rand(-10, 10),
-            'askedAt' => new \DateTimeImmutable(sprintf('-%d days', rand(1, 10)))
+            'name' => self::faker()->realText(50),
+            'question' => self::faker()->paragraph(
+                self::faker()->numberBetween(3,5)
+            ),
+            'votes' => self::faker()->numberBetween(-10, 10),
+            'askedAt' => self::faker()->dateTimeBetween('-100 days', '-1 minute')
         ];
     }
 
     protected function initialize(): self
     {
         // see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#initialization
-        return $this
-            // ->afterInstantiate(function(Question $question): void {})
-        ;
+        return $this->afterInstantiate(function(Question $question): void {
+            if (!$question->getSlug()) {
+                $slugger = new AsciiSlugger();
+                $question->setSlug($slugger->slug($question->getName()));
+            }
+        });
     }
 
     protected static function getClass(): string
