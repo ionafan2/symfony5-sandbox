@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Repository\AnswerRepository;
 use App\Repository\QuestionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -9,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
-#[ORM\Entity(repositoryClass:QuestionRepository::class)]
+#[ORM\Entity(repositoryClass: QuestionRepository::class)]
 class Question
 {
     use TimestampableEntity;
@@ -17,14 +18,14 @@ class Question
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    private ?int $id;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $name;
+    private ?string $name;
 
     #[ORM\Column(type: 'string', length: 100, unique: true)]
     #[Gedmo\Slug(fields: ['name'])]
-    private $slug;
+    private ?string $slug;
 
     #[ORM\Column(type: 'text')]
     private string $question;
@@ -102,7 +103,6 @@ class Question
         return $this->votes;
     }
 
-
     public function getVotesString(): string
     {
         return ($this->getVotes() > 0) ? '+ ' . abs($this->getVotes()) : '- ' . abs($this->getVotes());
@@ -139,9 +139,7 @@ class Question
 
     public function getApprovedAnswers(): Collection
     {
-        return $this->answers->filter(function (Answer $answer){
-            return $answer->isApproved();
-        });
+        return $this->answers->matching(AnswerRepository::createApprovedCriteria());
     }
 
     public function addAnswer(Answer $answer): self
