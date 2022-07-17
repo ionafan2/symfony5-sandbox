@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Entity\Question;
 use App\Repository\QuestionRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,13 +12,6 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class QuestionController extends AbstractController
 {
-    public function __construct(
-        private LoggerInterface $logger,
-        private bool            $isDebug
-    )
-    {
-    }
-
     #[Route(path: "/questions", name: "app_question_list")]
     public function homepage(QuestionRepository $repository)
     {
@@ -30,7 +22,6 @@ class QuestionController extends AbstractController
         ]);
     }
 
-
     #[Route(path: "/questions/new", name: "app_question_new")]
     public function new(EntityManagerInterface $em)
     {
@@ -40,15 +31,7 @@ class QuestionController extends AbstractController
     #[Route(path: "/questions/{slug}", name: "app_question_show")]
     public function show(Question $question): Response
     {
-        if (!$this->isDebug) {
-            $this->logger->info(__FUNCTION__);
-        }
-
-        $answers = [
-            'Make sure your cat is sitting *purrrfectly* still 🤣',
-            'Honestly, I like furry shoes better than MY cat',
-            'Maybe... try saying the spell backwards?',
-        ];
+        $answers = $question->getAnswers();
 
         return $this->render('question/show.html.twig', [
             'question' => $question,
