@@ -6,6 +6,12 @@ use App\Repository\AnswerRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
+enum Status : string {
+    case APPROVED = "approved";
+    case NEED_APPROVAL = "need_approval";
+    case SPAM = 'spam';
+}
+
 #[ORM\Entity(repositoryClass: AnswerRepository::class)]
 class Answer
 {
@@ -23,11 +29,25 @@ class Answer
     private ?string $username;
 
     #[ORM\Column(type: 'integer', nullable: false)]
-    private int $votes =0;
+    private int $votes = 0;
 
     #[ORM\ManyToOne(targetEntity: Question::class, inversedBy: 'answers')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Question $question;
+
+    #[ORM\Column(type: 'string', enumType: Status::class)]
+    private ?Status $status;
+
+    public function getStatus(): ?Status
+    {
+        return $this->status;
+    }
+
+    public function setStatus(Status $status): Answer
+    {
+        $this->status = $status;
+        return $this;
+    }
 
     public function getId(): ?int
     {
@@ -85,5 +105,10 @@ class Answer
         $this->question = $question;
 
         return $this;
+    }
+
+    public function isApproved() : bool
+    {
+        return $this->getStatus() === Status::APPROVED;
     }
 }

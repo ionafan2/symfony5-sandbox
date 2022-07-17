@@ -3,6 +3,7 @@
 namespace App\Factory;
 
 use App\Entity\Answer;
+use App\Entity\Status;
 use App\Repository\AnswerRepository;
 use Zenstruck\Foundry\RepositoryProxy;
 use Zenstruck\Foundry\ModelFactory;
@@ -43,8 +44,14 @@ final class AnswerFactory extends ModelFactory
             'username' => self::faker()->userName(),
             'votes' => self::faker()->numberBetween(-20, 50),
             'createdAt' => self::faker()->dateTimeBetween('-100 days'),
-            'question' => QuestionFactory::new()->unpublished()
+            'question' => QuestionFactory::new()->unpublished(),
+            'status' => Status::APPROVED
         ];
+    }
+
+    public function needsApproval(): self
+    {
+        return $this->addState(['status' => Status::NEED_APPROVAL]);
     }
 
     protected function initialize(): self
