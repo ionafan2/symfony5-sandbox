@@ -31,11 +31,8 @@ class QuestionController extends AbstractController
     #[Route(path: "/questions/{slug}", name: "app_question_show")]
     public function show(Question $question): Response
     {
-        $answers = $question->getAnswers();
-
         return $this->render('question/show.html.twig', [
-            'question' => $question,
-            'answers' => $answers
+            'question' => $question
         ]);
     }
 

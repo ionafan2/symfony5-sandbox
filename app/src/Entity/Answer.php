@@ -63,6 +63,11 @@ class Answer
         return $this->votes;
     }
 
+    public function getVotesString(): string
+    {
+        return ($this->getVotes() > 0) ? '+ ' . abs($this->getVotes()) : '- ' . abs($this->getVotes());
+    }
+
     public function setVotes(int $votes): self
     {
         $this->votes = $votes;
