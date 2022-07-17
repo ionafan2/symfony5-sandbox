@@ -22,7 +22,6 @@ class Question
     #[ORM\Column(type: 'string', length: 255)]
     private $name;
 
-
     #[ORM\Column(type: 'string', length: 100, unique: true)]
     #[Gedmo\Slug(fields: ['name'])]
     private $slug;
@@ -36,7 +35,8 @@ class Question
     #[ORM\Column(type: 'integer')]
     private int $votes = 0;
 
-    #[ORM\OneToMany(mappedBy: 'question', targetEntity: Answer::class)]
+    #[ORM\OneToMany(mappedBy: 'question', targetEntity: Answer::class, fetch: 'EXTRA_LAZY')]
+    #[ORM\OrderBy(value: ['createdAt' => "DESC"])]
     private Collection $answers;
 
     public function __construct()
