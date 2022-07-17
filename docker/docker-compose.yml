@@ -30,6 +30,7 @@ services:
       - mysql
     environment:
       - SSH_AUTH_SOCK="${SSH_AUTH_SOCK}"
+      - PHP_IDE_CONFIG=serverName=symfony5-sandbox.com # For CLI debuging from container. NO double quotes in value!
     volumes:
       - ${SSH_AUTH_SOCK}:${SSH_AUTH_SOCK}
       - ../../symfony5-sandbox/app:/var/www/symfony5-sandbox
