@@ -20,9 +20,7 @@ class QuestionController extends AbstractController
     {
     }
 
-    /**
-     * @Route("/", name="app_homepage")
-     */
+    #[Route(path: "/questions", name: "app_question_list")]
     public function homepage(QuestionRepository $repository)
     {
         $questions = $repository->findAllAskedOrderByNewest();
@@ -32,17 +30,14 @@ class QuestionController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/questions/new", name="app_new")
-     */
+
+    #[Route(path: "/questions/new", name: "app_question_new")]
     public function new(EntityManagerInterface $em)
     {
         return new Response('For v2');
     }
 
-    /**
-     * @Route("/questions/{slug}", name="app_question_show")
-     */
+    #[Route(path: "/questions/{slug}", name: "app_question_show")]
     public function show(Question $question): Response
     {
         if (!$this->isDebug) {
@@ -61,9 +56,7 @@ class QuestionController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/questions/{slug}/vote", name="app_question_vote", methods="POST")
-     */
+    #[Route(path: "/questions/{slug}/vote", name: "app_question_vote", methods: "POST")]
     public function questionVote(Question $question, Request $request, EntityManagerInterface $entityManager)
     {
         $direction = $request->request->get('direction');
