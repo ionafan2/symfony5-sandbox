@@ -37,7 +37,7 @@ class Question
     private int $votes = 0;
 
     #[ORM\OneToMany(mappedBy: 'question', targetEntity: Answer::class)]
-    private ArrayCollection $answers;
+    private Collection $answers;
 
     public function __construct()
     {

@@ -27,7 +27,7 @@ class Answer
 
     #[ORM\ManyToOne(targetEntity: Question::class, inversedBy: 'answers')]
     #[ORM\JoinColumn(nullable: false)]
-    private $question;
+    private ?Question $question;
 
     public function getId(): ?int
     {
