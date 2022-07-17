@@ -100,6 +100,11 @@ class Answer
         return $this->question;
     }
 
+    public function getQuestionText(): string
+    {
+        return $this->question->getQuestion();
+    }
+
     public function setQuestion(?Question $question): self
     {
         $this->question = $question;

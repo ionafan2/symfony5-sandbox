@@ -60,29 +60,25 @@ class AnswerRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    /**
+     * @return Answer[] Returns an array of Answer objects
+     */
+    public function findMostPopular(string $search = null): array
+    {
+        $queryBuilder = $this->createQueryBuilder('answer')
+            ->addCriteria(self::createApprovedCriteria())
+            ->orderBy('answer.votes', 'DESC')
+            ->innerJoin('answer.question', 'question')
+            ->addSelect('question');
 
-//    /**
-//     * @return Answer[] Returns an array of Answer objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('a')
-//            ->andWhere('a.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('a.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+        if ($search) {
+            $queryBuilder->andWhere('answer.content LIKE :searchTerm OR question.question LIKE :searchTerm')
+                ->setParameter('searchTerm', '%'.$search.'%');
+        }
 
-//    public function findOneBySomeField($value): ?Answer
-//    {
-//        return $this->createQueryBuilder('a')
-//            ->andWhere('a.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+        return $queryBuilder
+            ->setMaxResults(10)
+            ->getQuery()
+            ->getResult();
+    }
 }

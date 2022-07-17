@@ -12,26 +12,23 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class AnswerController extends AbstractController
 {
-//    /**
-//     * @Route("/answers/popular", name="app_popular_answers")
-//     */
-//    public function popularAnswers(AnswerRepository $answerRepository, Request $request)
-//    {
-//        $answers = $answerRepository->findMostPopular(
-//            $request->query->get('q')
-//        );
-//
-//        return $this->render('answer/popularAnswers.html.twig', [
-//            'answers' => $answers
-//        ]);
-
-//    }
-
-    /**
-     * @Route("/answers/{id}/vote", methods="POST", name="app_answer_vote")
-     */
-    public function answerVote(Answer $answer, LoggerInterface $logger, Request $request, EntityManagerInterface $entityManager)
+    #[Route(path: '/answers/popular', name: 'app_popular_answers')]
+    public function popularAnswers(AnswerRepository $answerRepository, Request $request)
     {
+        $answers = $answerRepository->findMostPopular(
+            $request->query->get('q')
+        );
+
+        return $this->render('answer/popularAnswers.html.twig', [
+            'answers' => $answers
+        ]);
+
+    }
+
+    #[Route(path: '/answers/{id}/vote', name: 'app_answer_vote', methods: 'POST')]
+    public function answerVote(
+        Answer $answer, LoggerInterface $logger, Request $request, EntityManagerInterface $entityManager
+    ) {
         $data = json_decode($request->getContent(), true);
         $direction = $data['direction'] ?? 'up';
 
