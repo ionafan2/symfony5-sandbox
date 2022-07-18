@@ -40,9 +40,13 @@ class Question
     #[ORM\OrderBy(value: ['createdAt' => "DESC"])]
     private Collection $answers;
 
+    #[ORM\ManyToMany(targetEntity: Tag::class, inversedBy: 'questions')]
+    private Collection $tag;
+
     public function __construct()
     {
         $this->answers = new ArrayCollection();
+        $this->tag = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -160,6 +164,30 @@ class Question
                 $answer->setQuestion(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Tag>
+     */
+    public function getTag(): Collection
+    {
+        return $this->tag;
+    }
+
+    public function addTag(Tag $tag): self
+    {
+        if (!$this->tag->contains($tag)) {
+            $this->tag[] = $tag;
+        }
+
+        return $this;
+    }
+
+    public function removeTag(Tag $tag): self
+    {
+        $this->tag->removeElement($tag);
 
         return $this;
     }
