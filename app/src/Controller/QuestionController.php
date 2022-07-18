@@ -20,7 +20,7 @@ class QuestionController extends AbstractController
         $queryBuilder = $repository->createAskedOrderedByNewestQueryBuilder();
 
         $pagerfanta = new Pagerfanta(new QueryAdapter($queryBuilder));
-        $pagerfanta->setMaxPerPage(5);
+        $pagerfanta->setMaxPerPage(2);
         $pagerfanta->setCurrentPage($page);
 
         return $this->render('question/homepage.html.twig', [
