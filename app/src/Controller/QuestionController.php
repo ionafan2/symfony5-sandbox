@@ -15,10 +15,10 @@ class QuestionController extends AbstractController
     #[Route(path: "/questions", name: "app_question_list")]
     public function homepage(QuestionRepository $repository)
     {
-        $questions = $repository->findAllAskedOrderByNewest();
+        $queryBuilder = $repository->createAskedOrderedByNewestQueryBuilder();
 
         return $this->render('question/homepage.html.twig', [
-            'questions' => $questions,
+            'questions' => $queryBuilder->getQuery()->getResult(),
         ]);
     }
 

@@ -48,15 +48,14 @@ class QuestionRepository extends ServiceEntityRepository
         }
     }
 
-    /**
-     * @return Question[] Returns an array of Question objects
-     */
-    public function findAllAskedOrderByNewest()
+    public function createAskedOrderedByNewestQueryBuilder(): QueryBuilder
     {
         return $this->addIsAskedQueryBuilder()
             ->orderBy('q.askedAt', 'DESC')
-            ->getQuery()
-            ->getResult();
+            ->leftJoin('q.questionTags', 'question_tag')
+            ->innerJoin('question_tag.tag', 'tag')
+            ->addSelect('question_tag', 'tag')
+            ;
     }
 
     private function addIsAskedQueryBuilder(QueryBuilder $qb = null): QueryBuilder

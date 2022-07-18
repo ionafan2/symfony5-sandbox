@@ -40,13 +40,13 @@ class Question
     #[ORM\OrderBy(value: ['createdAt' => "DESC"])]
     private Collection $answers;
 
-    #[ORM\ManyToMany(targetEntity: Tag::class, inversedBy: 'questions')]
-    private Collection $tag;
+    #[ORM\OneToMany(mappedBy: 'question', targetEntity: QuestionTag::class)]
+    private Collection $questionTags;
 
     public function __construct()
     {
         $this->answers = new ArrayCollection();
-        $this->tag = new ArrayCollection();
+        $this->questionTags = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -169,25 +169,31 @@ class Question
     }
 
     /**
-     * @return Collection<int, Tag>
+     * @return Collection<int, QuestionTag>
      */
-    public function getTag(): Collection
+    public function getQuestionTags(): Collection
     {
-        return $this->tag;
+        return $this->questionTags;
     }
 
-    public function addTag(Tag $tag): self
+    public function addQuestionTag(QuestionTag $questionTag): self
     {
-        if (!$this->tag->contains($tag)) {
-            $this->tag[] = $tag;
+        if (!$this->questionTags->contains($questionTag)) {
+            $this->questionTags[] = $questionTag;
+            $questionTag->setQuestion($this);
         }
 
         return $this;
     }
 
-    public function removeTag(Tag $tag): self
+    public function removeQuestionTag(QuestionTag $questionTag): self
     {
-        $this->tag->removeElement($tag);
+        if ($this->questionTags->removeElement($questionTag)) {
+            // set the owning side to null (unless already changed)
+            if ($questionTag->getQuestion() === $this) {
+                $questionTag->setQuestion(null);
+            }
+        }
 
         return $this;
     }
