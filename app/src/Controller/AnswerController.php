@@ -8,12 +8,16 @@ use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class AnswerController extends AbstractController
 {
+    /**
+     * @throws \Doctrine\ORM\Query\QueryException
+     */
     #[Route(path: '/answers/popular', name: 'app_popular_answers')]
-    public function popularAnswers(AnswerRepository $answerRepository, Request $request)
+    public function popularAnswers(AnswerRepository $answerRepository, Request $request): Response
     {
         $answers = $answerRepository->findMostPopular(
             $request->query->get('q')
