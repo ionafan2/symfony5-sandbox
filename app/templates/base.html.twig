@@ -28,7 +28,7 @@
                 </ul>
             </div>
 
-            {% if is_granted("ROLE_USER") %}
+            {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
                 <a class="nav-link text-black-50" href="{{ path('app_auth_logout') }}">Log out</a>
             {% else %}
                 <a class="nav-link text-black-50" href="{{ path('app_auth_login') }}">Log In</a>
