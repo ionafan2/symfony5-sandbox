@@ -26,6 +26,9 @@ security:
                 
             remember_me:
                 secret: '%env(APP_SECRET)%'
+                signature_properties:
+                    - password
+                always_remember_me: true
             # activate different ways to authenticate
             
             # https://symfony.com/doc/current/security.html#the-firewall
