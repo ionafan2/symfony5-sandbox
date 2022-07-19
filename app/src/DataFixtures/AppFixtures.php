@@ -14,11 +14,11 @@ class AppFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        TagFactory::createMany(100);
+        TagFactory::createMany(20);
 
-        $questions = QuestionFactory::createMany(20);
+        $questions = QuestionFactory::createMany(10);
 
-        QuestionTagFactory::createMany(100, function () {
+        QuestionTagFactory::createMany(20, function () {
             return [
                 'tag' => TagFactory::random(),
                 'question' => QuestionFactory::random(),
@@ -29,16 +29,21 @@ class AppFixtures extends Fixture
             ->unpublished()
             ->createMany(5);
 
-        AnswerFactory::createMany(100, function () use ($questions) {
+        AnswerFactory::createMany(50, function () use ($questions) {
             return ['question' => $questions[array_rand($questions)]];
         });
 
         AnswerFactory::new(function () use ($questions) {
             return ['question' => $questions[array_rand($questions)]];
         })
-            ->needsApproval()->many(20)->create();
+            ->needsApproval()->many(10)->create();
 
         UserFactory::createOne(['email'=> 'test@test.com']);
+        UserFactory::createOne([
+            'email'=> 'admin@test.com',
+            'roles' => ['ROLE_ADMIN']
+        ]);
+
         UserFactory::createMany(10);
 
         $manager->flush();

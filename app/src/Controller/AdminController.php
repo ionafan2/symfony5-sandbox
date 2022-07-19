@@ -9,10 +9,10 @@ use Symfony\UX\Chartjs\Model\Chart;
 
 class AdminController extends AbstractController
 {
-    #[Route(path: '/admin', name: 'admin_dashboard')]
+    #[Route(path: '/admin', name: 'app_admin_dashboard')]
     public function dashboard(ChartBuilderInterface $chartBuilder)
     {
-        $chart = $chartBuilder->createChart(Chart::TYPE_LINE);
+        $chart = $chartBuilder->createChart(Chart::TYPE_BAR);
         $chart->setData([
             'labels' => ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
             'datasets' => [
