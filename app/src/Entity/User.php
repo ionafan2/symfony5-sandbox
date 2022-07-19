@@ -20,6 +20,9 @@ class User implements UserInterface
     #[ORM\Column(type: 'json')]
     private $roles = [];
 
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $firstName;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -101,5 +104,17 @@ class User implements UserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    public function getFirstName(): ?string
+    {
+        return $this->firstName;
+    }
+
+    public function setFirstName(?string $firstName): self
+    {
+        $this->firstName = $firstName;
+
+        return $this;
     }
 }
