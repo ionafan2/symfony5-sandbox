@@ -16,4 +16,13 @@ class SecurityController extends AbstractController
             'error' => $authenticationUtils->getLastAuthenticationError()
         ]);
     }
+
+    /**
+     * @throws \Exception
+     */
+    #[Route('/auth/logout', name: 'app_auth_logout')]
+    public function logout()
+    {
+        throw new \Exception('Logout should neve be reached!');
+    }
 }
