@@ -7,6 +7,7 @@ use App\Repository\QuestionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Pagerfanta;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -29,6 +30,7 @@ class QuestionController extends AbstractController
     }
 
     #[Route(path: "/questions/new", name: "app_question_new")]
+    #[IsGranted("ROLE_USER")]
     public function new(EntityManagerInterface $em)
     {
         return new Response('For v2');
