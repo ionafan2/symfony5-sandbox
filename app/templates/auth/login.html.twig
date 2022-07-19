@@ -8,6 +8,10 @@
         <form method="POST" action="{{ path('app_auth_login') }}">
             <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
 
+            {% if error %}
+                <div class="alert alert-danger">{{ error.messageKey }}</div>
+            {% endif %}
+
             <div class="form-floating">
                 <input name="email" type="email" class="form-control" id="inputEmail" placeholder="name@example.com">
                 <label for="floatingInput">Email address</label>
