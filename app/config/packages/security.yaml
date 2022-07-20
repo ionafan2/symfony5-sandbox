@@ -36,6 +36,8 @@ security:
             logout:
                 path: app_auth_logout
                 target: app_question_list
+            
+            switch_user: true
                 
             remember_me:
                 secret: '%env(APP_SECRET)%'
