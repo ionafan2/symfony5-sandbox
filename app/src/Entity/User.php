@@ -38,7 +38,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $plainPassword;
 
     #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Question::class)]
-    private $questions;
+    private Collection $questions;
+
+    #[ORM\Column(type: 'boolean')]
+    private bool $isVerified = false;
 
     public function __construct()
     {
@@ -199,6 +202,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $question->setOwner(null);
             }
         }
+
+        return $this;
+    }
+
+    public function isIsVerified(): bool
+    {
+        return $this->isVerified;
+    }
+
+    public function setIsVerified(bool $isVerified): self
+    {
+        $this->isVerified = $isVerified;
 
         return $this;
     }
