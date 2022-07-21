@@ -49,6 +49,8 @@ class QuestionController extends AbstractController
     public function edit(Question $question): Response
     {
 
+        $this->denyAccessUnlessGranted('EDIT', $question);
+
         return $this->render('question/edit.html.twig', [
             'question' => $question
         ]);
