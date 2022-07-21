@@ -14,11 +14,25 @@ class AppFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        TagFactory::createMany(20);
+        UserFactory::createOne([
+            'email'=> 'test@test.com'
+        ]);
+        UserFactory::createOne([
+            'email'=> 'admin@test.com',
+            'roles' => ['ROLE_ADMIN']
+        ]);
 
-        $questions = QuestionFactory::createMany(10);
+        UserFactory::createMany(10);
 
-        QuestionTagFactory::createMany(20, function () {
+        TagFactory::createMany(40);
+
+        $questions = QuestionFactory::createMany(20, function () {
+            return [
+                'owner' => UserFactory::random(),
+            ];
+        });
+
+        QuestionTagFactory::createMany(40, function () {
             return [
                 'tag' => TagFactory::random(),
                 'question' => QuestionFactory::random(),
@@ -27,7 +41,11 @@ class AppFixtures extends Fixture
 
         QuestionFactory::new()
             ->unpublished()
-            ->createMany(5);
+            ->createMany(5, function () {
+                return [
+                    'owner' => UserFactory::random(),
+                ];
+            });
 
         AnswerFactory::createMany(50, function () use ($questions) {
             return ['question' => $questions[array_rand($questions)]];
@@ -37,16 +55,6 @@ class AppFixtures extends Fixture
             return ['question' => $questions[array_rand($questions)]];
         })
             ->needsApproval()->many(10)->create();
-
-        UserFactory::createOne(['email'=> 'test@test.com']);
-        UserFactory::createOne([
-            'email'=> 'admin@test.com',
-            'roles' => ['ROLE_ADMIN']
-        ]);
-
-        UserFactory::createMany(10);
-
-        $manager->flush();
 
     }
 }
