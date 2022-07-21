@@ -38,6 +38,8 @@ security:
                 target: app_question_list
             
             switch_user: true
+            
+            login_throttling: true
                 
             remember_me:
                 secret: '%env(APP_SECRET)%'
