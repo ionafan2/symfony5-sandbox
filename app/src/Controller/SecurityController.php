@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Endroid\QrCode\Builder\Builder;
+use Endroid\QrCode\QrCode;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Totp\TotpAuthenticatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -45,12 +47,13 @@ class SecurityController extends AbstractController
     }
 
     #[Route('/auth/2fa/qr-code', name: 'app_qr_code' )]
-    public function displayGoogleAuthenticatorQrCode(QrCodeGenerator $qrCodeGenerator)
+    #[IsGranted('ROLE_USER')]
+    public function displayGoogleAuthenticatorQrCode(TotpAuthenticatorInterface $totpAuthenticator)
     {
-        // $qrCode is provided by the endroid/qr-code library. See the docs how to customize the look of the QR code:
-        // https://github.com/endroid/qr-code
-        $qrCode = $qrCodeGenerator->getTotpQrCode($this->getUser());
+        $qrCodeContent = $totpAuthenticator->getQRContent($this->getUser());
 
-        return new Response($qrCode->writeString(), 200, ['Content-Type' => 'image/png']);
+        $res = Builder::create()->data($qrCodeContent)->build();
+
+        return new Response($res->getString(), 200, ['Content-Type' => 'image/png']);
     }
 }
