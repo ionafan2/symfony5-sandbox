@@ -47,7 +47,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFact
     private bool $isVerified = false;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private string $totpSecret;
+    private ?string $totpSecret = null;
 
     public function __construct()
     {
@@ -236,9 +236,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFact
 
     public function getTotpAuthenticationConfiguration(): ?TotpConfigurationInterface
     {
-        return new TotpConfiguration(
-            $this->totpSecret, TotpConfiguration::ALGORITHM_SHA1, 30, 6
-        );
+        return new TotpConfiguration($this->totpSecret, TotpConfiguration::ALGORITHM_SHA1, 30, 6);
     }
 
     public function setTotpSecret(?string $totpSecret): self
