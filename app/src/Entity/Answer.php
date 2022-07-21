@@ -31,7 +31,7 @@ class Answer
     #[ORM\Column(type: 'integer', nullable: false)]
     private int $votes = 0;
 
-    #[ORM\ManyToOne(targetEntity: Question::class, inversedBy: 'answers')]
+    #[ORM\ManyToOne(targetEntity: Question::class, fetch: 'EAGER', inversedBy: 'answers')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Question $question;
 

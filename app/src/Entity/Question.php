@@ -43,7 +43,7 @@ class Question
     #[ORM\OneToMany(mappedBy: 'question', targetEntity: QuestionTag::class)]
     private Collection $questionTags;
 
-    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'questions')]
+    #[ORM\ManyToOne(targetEntity: User::class, fetch: 'EAGER', inversedBy: 'questions')]
     #[ORM\JoinColumn(nullable: false)]
     private User $owner;
 

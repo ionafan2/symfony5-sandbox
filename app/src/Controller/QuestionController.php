@@ -13,10 +13,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+#[IsGranted('IS_AUTHENTICATED_REMEMBERED')]
 class QuestionController extends AbstractController
 {
     #[Route(path: "/questions/{page<\d+>}", name: "app_question_list")]
-    public function homepage(QuestionRepository $repository, int $page = 1)
+    public function list(QuestionRepository $repository, int $page = 1): Response
     {
         $queryBuilder = $repository->createAskedOrderedByNewestQueryBuilder();
 
@@ -24,7 +25,7 @@ class QuestionController extends AbstractController
         $pagerfanta->setMaxPerPage(2);
         $pagerfanta->setCurrentPage($page);
 
-        return $this->render('question/homepage.html.twig', [
+        return $this->render('question/list.html.twig', [
             'pager' => $pagerfanta,
         ]);
     }
@@ -40,6 +41,15 @@ class QuestionController extends AbstractController
     public function show(Question $question): Response
     {
         return $this->render('question/show.html.twig', [
+            'question' => $question
+        ]);
+    }
+
+    #[Route(path: "/questions/edit/{slug}", name: "app_question_edit")]
+    public function edit(Question $question): Response
+    {
+
+        return $this->render('question/edit.html.twig', [
             'question' => $question
         ]);
     }
