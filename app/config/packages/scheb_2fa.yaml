@@ -5,3 +5,5 @@ scheb_two_factor:
         #- Symfony\Component\Security\Http\Authenticator\Token\PostAuthenticationToken
     totp:
         enabled: true
+        issuer: 'SymfonyCasts Test App'
+        template: auth/2fa_form.html.twig
